@@ -1,0 +1,11 @@
+syntax = "proto2";
+package api;
+
+enum ErrCode {
+  // 成功
+  Success = 0;
+  // 参数为空
+  ParameterNull = 1;
+  // 逻辑错误
+  LogicError = 2;
+}
