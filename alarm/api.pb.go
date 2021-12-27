@@ -197,11 +197,11 @@ var fileDescriptor_00212fb1f9d3bf1c = []byte{
 	0xd4, 0xbc, 0x12, 0x09, 0x66, 0x05, 0x26, 0x0d, 0xce, 0x20, 0x18, 0x57, 0x89, 0x1b, 0x6e, 0x57,
 	0x71, 0x81, 0x96, 0x31, 0x17, 0x27, 0xdc, 0x50, 0x21, 0x21, 0x2e, 0x3e, 0xe7, 0xfc, 0xd2, 0x82,
 	0xfc, 0x3c, 0x97, 0xcc, 0xbc, 0xf4, 0x90, 0xc4, 0x9c, 0x6c, 0x01, 0x46, 0x84, 0x58, 0x60, 0x65,
-	0x78, 0xaa, 0x73, 0x46, 0x62, 0x89, 0x00, 0x93, 0x91, 0x27, 0x17, 0x2b, 0x58, 0x93, 0x90, 0x03,
-	0x17, 0x07, 0x4c, 0xa9, 0x10, 0xc4, 0x85, 0x70, 0x5f, 0x48, 0xa1, 0xf0, 0x8b, 0x0b, 0x94, 0x44,
-	0x9a, 0x2e, 0x3f, 0x99, 0xcc, 0xc4, 0xa7, 0xc4, 0x03, 0x76, 0xb9, 0x7e, 0x1e, 0x58, 0xc2, 0x89,
-	0xe7, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x04, 0x04, 0x00,
-	0x00, 0xff, 0xff, 0x70, 0x7f, 0x36, 0x3d, 0x35, 0x01, 0x00, 0x00,
+	0x78, 0xaa, 0x73, 0x46, 0x62, 0x89, 0x00, 0x93, 0x91, 0x3b, 0x17, 0x2b, 0x58, 0x93, 0x90, 0x1d,
+	0x17, 0x1b, 0xc4, 0x28, 0x21, 0x88, 0xfb, 0xe0, 0x7e, 0x90, 0x42, 0xe1, 0x17, 0x17, 0x28, 0x89,
+	0x34, 0x5d, 0x7e, 0x32, 0x99, 0x89, 0x4f, 0x89, 0x07, 0xec, 0x6e, 0xfd, 0x3c, 0xb0, 0x84, 0x13,
+	0xcf, 0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78, 0x24, 0xc7, 0x08, 0x08, 0x00,
+	0x00, 0xff, 0xff, 0x5c, 0x86, 0xc0, 0x77, 0x33, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -217,7 +217,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type AlarmClient interface {
 	// 通知
-	DingTalk(ctx context.Context, in *NotifyReq, opts ...grpc.CallOption) (*NotifyRsp, error)
+	Notify(ctx context.Context, in *NotifyReq, opts ...grpc.CallOption) (*NotifyRsp, error)
 }
 
 type alarmClient struct {
@@ -228,9 +228,9 @@ func NewAlarmClient(cc *grpc.ClientConn) AlarmClient {
 	return &alarmClient{cc}
 }
 
-func (c *alarmClient) DingTalk(ctx context.Context, in *NotifyReq, opts ...grpc.CallOption) (*NotifyRsp, error) {
+func (c *alarmClient) Notify(ctx context.Context, in *NotifyReq, opts ...grpc.CallOption) (*NotifyRsp, error) {
 	out := new(NotifyRsp)
-	err := c.cc.Invoke(ctx, "/api.Alarm/DingTalk", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.Alarm/Notify", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -240,35 +240,35 @@ func (c *alarmClient) DingTalk(ctx context.Context, in *NotifyReq, opts ...grpc.
 // AlarmServer is the server API for Alarm service.
 type AlarmServer interface {
 	// 通知
-	DingTalk(context.Context, *NotifyReq) (*NotifyRsp, error)
+	Notify(context.Context, *NotifyReq) (*NotifyRsp, error)
 }
 
 // UnimplementedAlarmServer can be embedded to have forward compatible implementations.
 type UnimplementedAlarmServer struct {
 }
 
-func (*UnimplementedAlarmServer) DingTalk(ctx context.Context, req *NotifyReq) (*NotifyRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DingTalk not implemented")
+func (*UnimplementedAlarmServer) Notify(ctx context.Context, req *NotifyReq) (*NotifyRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Notify not implemented")
 }
 
 func RegisterAlarmServer(s *grpc.Server, srv AlarmServer) {
 	s.RegisterService(&_Alarm_serviceDesc, srv)
 }
 
-func _Alarm_DingTalk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Alarm_Notify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NotifyReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlarmServer).DingTalk(ctx, in)
+		return srv.(AlarmServer).Notify(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.Alarm/DingTalk",
+		FullMethod: "/api.Alarm/Notify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlarmServer).DingTalk(ctx, req.(*NotifyReq))
+		return srv.(AlarmServer).Notify(ctx, req.(*NotifyReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -278,8 +278,8 @@ var _Alarm_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*AlarmServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "DingTalk",
-			Handler:    _Alarm_DingTalk_Handler,
+			MethodName: "Notify",
+			Handler:    _Alarm_Notify_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
